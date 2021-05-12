@@ -574,8 +574,8 @@ sample.namesR.all &lt;-<span class="st"> </span><span class="kw">sub</span>(<spa
     <span class="kw">pdf</span>(<span class="kw">paste0</span>(<span class="st">&quot;dada2/log/errR_&quot;</span>, i, <span class="st">&quot;.pdf&quot;</span>))
     <span class="kw">print</span>(<span class="kw">plotErrors</span>(errR, <span class="dt">nominalQ =</span> <span class="ot">TRUE</span>))
     <span class="kw">dev.off</span>()
-    <span class="kw">save</span>(errF, <span class="dt">file =</span> <span class="kw">paste0</span>(path, <span class="st">&quot;/dada2/log/errF_&quot;</span>, i, <span class="st">&quot;.rda&quot;</span>))  <span class="co"># CHANGE ME to where you want sequence table saved</span>
-    <span class="kw">save</span>(errR, <span class="dt">file =</span> <span class="kw">paste0</span>(path, <span class="st">&quot;/dada2/log/errR_&quot;</span>, i, <span class="st">&quot;.rda&quot;</span>))  <span class="co"># CHANGE ME to where you want sequence table saved</span>
+    <span class="kw">save</span>(errF, <span class="dt">file =</span> <span class="kw">paste0</span>(path, <span class="st">&quot;/dada2/log/errF_&quot;</span>, i, <span class="st">&quot;.rda&quot;</span>))  <span class="co"># CHANGE ME to where you want learn error models saved</span>
+    <span class="kw">save</span>(errR, <span class="dt">file =</span> <span class="kw">paste0</span>(path, <span class="st">&quot;/dada2/log/errR_&quot;</span>, i, <span class="st">&quot;.rda&quot;</span>))  <span class="co"># CHANGE ME to where you want learn error models saved</span>
 }
 
 <span class="co"># Version of packages used to build this document</span>
@@ -760,7 +760,7 @@ filtErr &lt;-<span class="st"> </span><span class="kw">sort</span>(<span class="
         mergers[[i]] &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">samples =</span> <span class="kw">names</span>(mergers)[i], mergers[[i]])
     }
     mergers &lt;-<span class="st"> </span><span class="kw">rbindlist</span>(mergers)
-    <span class="kw">saveRDS</span>(mergers, <span class="kw">paste0</span>(path, <span class="st">&quot;/dada2/log/mergers_&quot;</span>, i, <span class="st">&quot;.rds&quot;</span>))  <span class="co"># CHANGE ME to where you want sequence table saved</span>
+    <span class="kw">saveRDS</span>(mergers, <span class="kw">paste0</span>(path, <span class="st">&quot;/dada2/log/mergers_&quot;</span>, i, <span class="st">&quot;.rds&quot;</span>))  <span class="co"># CHANGE ME to where you want merged files saved</span>
 }
 
 <span class="co"># Version of packages used to build this document</span>
