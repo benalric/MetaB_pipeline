@@ -574,8 +574,8 @@ sample.namesR.all &lt;-<span class="st"> </span><span class="kw">sub</span>(<spa
     <span class="kw">pdf</span>(<span class="kw">paste0</span>(<span class="st">&quot;dada2/log/errR_&quot;</span>, i, <span class="st">&quot;.pdf&quot;</span>))
     <span class="kw">print</span>(<span class="kw">plotErrors</span>(errR, <span class="dt">nominalQ =</span> <span class="ot">TRUE</span>))
     <span class="kw">dev.off</span>()
-    <span class="kw">save</span>(errF, <span class="dt">file =</span> <span class="kw">paste0</span>(path, <span class="st">&quot;/dada2/log/errF_&quot;</span>, i, <span class="st">&quot;.rda&quot;</span>))  <span class="co"># CHANGE ME to where you want learn error models saved</span>
-    <span class="kw">save</span>(errR, <span class="dt">file =</span> <span class="kw">paste0</span>(path, <span class="st">&quot;/dada2/log/errR_&quot;</span>, i, <span class="st">&quot;.rda&quot;</span>))  <span class="co"># CHANGE ME to where you want learn error models saved</span>
+    <span class="kw">save</span>(errF, <span class="dt">file =</span> <span class="kw">paste0</span>(path, <span class="st">&quot;/dada2/log/errF_&quot;</span>, i, <span class="st">&quot;.rda&quot;</span>))  <span class="co"># CHANGE ME to where you want learn error models to be saved</span>
+    <span class="kw">save</span>(errR, <span class="dt">file =</span> <span class="kw">paste0</span>(path, <span class="st">&quot;/dada2/log/errR_&quot;</span>, i, <span class="st">&quot;.rda&quot;</span>))  <span class="co"># CHANGE ME to where you want learn error models to be saved</span>
 }
 
 <span class="co"># Version of packages used to build this document</span>
@@ -752,15 +752,15 @@ filtErr &lt;-<span class="st"> </span><span class="kw">sort</span>(<span class="
     <span class="co"># Construct sequence table</span>
     track &lt;-<span class="st"> </span><span class="kw">rbindlist</span>(track)
     seqtab &lt;-<span class="st"> </span><span class="kw">makeSequenceTable</span>(mergers)
-    <span class="kw">saveRDS</span>(track, <span class="kw">paste0</span>(path, <span class="st">&quot;/dada2/log/track_&quot;</span>, i, <span class="st">&quot;.rds&quot;</span>))  <span class="co"># CHANGE ME to where you want sequence table saved</span>
-    <span class="kw">saveRDS</span>(seqtab, <span class="kw">paste0</span>(path, <span class="st">&quot;/dada2/seqtab_&quot;</span>, i, <span class="st">&quot;.rds&quot;</span>))  <span class="co"># CHANGE ME to where you want sequence table saved</span>
+    <span class="kw">saveRDS</span>(track, <span class="kw">paste0</span>(path, <span class="st">&quot;/dada2/log/track_&quot;</span>, i, <span class="st">&quot;.rds&quot;</span>))  <span class="co"># CHANGE ME to where you want sequence table to be saved</span>
+    <span class="kw">saveRDS</span>(seqtab, <span class="kw">paste0</span>(path, <span class="st">&quot;/dada2/seqtab_&quot;</span>, i, <span class="st">&quot;.rds&quot;</span>))  <span class="co"># CHANGE ME to where you want sequence table to be saved</span>
     <span class="kw">rm</span>(track)
     <span class="kw">rm</span>(seqtab)
     <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(mergers)) {
         mergers[[i]] &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">samples =</span> <span class="kw">names</span>(mergers)[i], mergers[[i]])
     }
     mergers &lt;-<span class="st"> </span><span class="kw">rbindlist</span>(mergers)
-    <span class="kw">saveRDS</span>(mergers, <span class="kw">paste0</span>(path, <span class="st">&quot;/dada2/log/mergers_&quot;</span>, i, <span class="st">&quot;.rds&quot;</span>))  <span class="co"># CHANGE ME to where you want merged files saved</span>
+    <span class="kw">saveRDS</span>(mergers, <span class="kw">paste0</span>(path, <span class="st">&quot;/dada2/log/mergers_&quot;</span>, i, <span class="st">&quot;.rds&quot;</span>))  <span class="co"># CHANGE ME to where you want merged table to be saved</span>
 }
 
 <span class="co"># Version of packages used to build this document</span>

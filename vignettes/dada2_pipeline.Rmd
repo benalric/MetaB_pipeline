@@ -376,8 +376,8 @@ foreach(i = runs, .packages = c("data.table","dada2")) %dopar% {
   pdf(paste0("dada2/log/errR_", i, ".pdf"))
   print(plotErrors(errR, nominalQ = TRUE))
   dev.off()
-  save(errF, file = paste0(path, "/dada2/log/errF_",i,".rda")) # CHANGE ME to where you want learn error models saved
-  save(errR, file = paste0(path, "/dada2/log/errR_",i,".rda")) # CHANGE ME to where you want learn error models saved
+  save(errF, file = paste0(path, "/dada2/log/errF_",i,".rda")) # CHANGE ME to where you want learn error models to be saved
+  save(errR, file = paste0(path, "/dada2/log/errR_",i,".rda")) # CHANGE ME to where you want learn error models to be saved
 }
 
 # Version of packages used to build this document
@@ -519,15 +519,15 @@ foreach(i = runs, .packages = c("data.table","dada2")) %dopar% {
   # Construct sequence table
   track <- rbindlist(track)
   seqtab <- makeSequenceTable(mergers)
-  saveRDS(track, paste0(path, "/dada2/log/track_",i,".rds")) # CHANGE ME to where you want sequence table saved
-  saveRDS(seqtab, paste0(path, "/dada2/seqtab_",i,".rds")) # CHANGE ME to where you want sequence table saved
+  saveRDS(track, paste0(path, "/dada2/log/track_",i,".rds")) # CHANGE ME to where you want sequence table to be saved
+  saveRDS(seqtab, paste0(path, "/dada2/seqtab_",i,".rds")) # CHANGE ME to where you want sequence table to be saved
   rm(track)
   rm(seqtab)
   for(i in 1:length(mergers)) {
     mergers[[i]] <- data.frame(samples = names(mergers)[i], mergers[[i]])
   }
   mergers <- rbindlist(mergers)
-  saveRDS(mergers, paste0(path, "/dada2/log/mergers_",i,".rds")) # CHANGE ME to where you want merged files saved
+  saveRDS(mergers, paste0(path, "/dada2/log/mergers_",i,".rds")) # CHANGE ME to where you want merged table to be saved
 }
 
 # Version of packages used to build this document
