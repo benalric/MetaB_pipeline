@@ -29,7 +29,7 @@ knitr::opts_knit$set(width=75)
 ```
 
 # Aims
-In this repository, you will find the tutotrial explaining how to process metabarcoding data with the [`dada2`](https://www.nature.com/articles/nmeth.3869) suite as implementated in [R](https://benjjneb.github.io/dada2/dada-installation.html) and generate tables of amplicon sequence variants (i.e., ASVs). This tutorial is adapted from the `dada2` [tutorial](https://benjjneb.github.io/dada2/tutorial.html).
+In this repository, you will find the tutotrial explaining how to process metabarcoding data with the `dada2` [suite](https://www.nature.com/articles/nmeth.3869) as implementated in [R](https://benjjneb.github.io/dada2/dada-installation.html) and generate tables of amplicon sequence variants (i.e., ASVs). This tutorial is adapted from the `dada2` [tutorial](https://benjjneb.github.io/dada2/tutorial.html).
 
 # Overview of `dada2` pipeline
 The starting point of the `dada2` pipeline is a set of demultiplexed fastq files corresponding to the samples in our amplicon sequencing study. That is, `dada2` expects there to be an individual fastq file for each sample (or two fastq files, one forward and one reverse for each sample). Demultiplexing is often performed at the sequencing center, but if that has not been done there are a variety of tools to accomplish this.<br/>Once demultiplexed fastq files without non-biological nucleotides are in hand, the `dada2` pipeline proceeds in eight steps as follow:
