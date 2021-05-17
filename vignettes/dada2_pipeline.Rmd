@@ -173,7 +173,7 @@ srun Rscript /shared/projects/indigene/PHYTOPORT/18SV4/script/dada2_02_filter_tr
 ```
 
 ```{r, eval = FALSE}
-# Sction corresponding to the Rscript dada2_02_filter_trim_a.R #
+# Section corresponding to the Rscript dada2_02_filter_trim_a.R #
 # ------------------------------------------------------------ #
 
 
