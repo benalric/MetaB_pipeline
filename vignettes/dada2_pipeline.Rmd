@@ -77,9 +77,8 @@ srun Rscript /shared/projects/indigene/PHYTOPORT/18SV4/script/dada2_01_quality_p
 ```
 
 ```{r, eval = FALSE}
-# --------------------------------------------------------------- #
-# This section corresponds to the Rscript dada2_01_quality_plot.R #
-# --------------------------------------------------------------- #
+# Section corresponding to the Rscript dada2_01_quality_plot.R #
+# ------------------------------------------------------------ #
 
 
 # Some packages must be installed and loaded
@@ -174,9 +173,8 @@ srun Rscript /shared/projects/indigene/PHYTOPORT/18SV4/script/dada2_02_filter_tr
 ```
 
 ```{r, eval = FALSE}
-# ---------------------------------------------------------------- #
-# This section corresponds to the Rscript dada2_02_filter_trim_a.R #
-# ---------------------------------------------------------------- #
+# Sction corresponding to the Rscript dada2_02_filter_trim_a.R #
+# ------------------------------------------------------------ #
 
 
 # Some packages must be installed and loaded
@@ -261,9 +259,8 @@ srun Rscript /shared/projects/indigene/PHYTOPORT/18SV4/script/dada2_02_filter_tr
 ```
 
 ```{r, eval = FALSE}
-# ---------------------------------------------------------------- #
-# This section corresponds to the Rscript dada2_02_filter_trim_b.R #
-# ---------------------------------------------------------------- #
+# Section corresponding to the Rscript dada2_02_filter_trim_b.R #
+# ------------------------------------------------------------- #
 
 
 # Some packages must be installed and loaded
@@ -306,9 +303,8 @@ srun Rscript /shared/projects/indigene/PHYTOPORT/18SV4/script/dada2_03_learn_err
 ```
 
 ```{r, eval = FALSE}
-# -------------------------------------------------------------- #
-# This section corresponds to the Rscript dada2_03_learn_error.R #
-# -------------------------------------------------------------- #
+# Section corresponding to the Rscript dada2_03_learn_error.R #
+# ----------------------------------------------------------- #
 
 
 # Some packages must be installed and loaded
@@ -427,9 +423,8 @@ srun Rscript /shared/projects/indigene/PHYTOPORT/18SV4/script/dada2_04_denoising
 ```
 
 ```{r, eval = FALSE}
-# -------------------------------------------------------------------- #
-# This section corresponds to the Rscript dada2_04_denoising_merging.R #
-# -------------------------------------------------------------------- #
+# Section corresponding to the Rscript dada2_04_denoising_merging.R #
+# ----------------------------------------------------------------- #
 
 
 # Some packages must be installed and loaded
@@ -562,9 +557,8 @@ srun Rscript /shared/projects/indigene/PHYTOPORT/18SV4/script/dada2_05_chimeras.
 ```
 
 ```{r, eval = FALSE}
-# ----------------------------------------------------------- #
-# This section corresponds to the Rscript dada2_05_chimeras.R #
-# ---------------------------------------------- ------------ #
+# Section corresponding to the Rscript dada2_05_chimeras.R #
+# ------------------------------------------- ------------ #
 
 # Some packages must be installed and loaded
 library(dada2); packageVersion("dada2")

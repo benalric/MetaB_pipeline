@@ -7,7 +7,7 @@
 
         <meta name="author" content="Benjamin Alric" />
     
-        <meta name="date" content="2021-05-12" />
+        <meta name="date" content="2021-05-17" />
     
     <title>Tutorial for metabarcode analysis</title>
 
@@ -175,7 +175,7 @@
     </div>
     <div id="postamble" data-toggle="wy-nav-shift" class="status">
                   <p class="author"><span class="glyphicon glyphicon-user"></span> Benjamin Alric</p>
-                        <p class="date"><span class="glyphicon glyphicon-calendar"></span> 2021-05-12</p>
+                        <p class="date"><span class="glyphicon glyphicon-calendar"></span> 2021-05-17</p>
           </div>
    </div>
    
@@ -256,9 +256,8 @@
 <span class="ex">module</span> load r/4.0.3
 
 <span class="ex">srun</span> Rscript /shared/projects/indigene/PHYTOPORT/18SV4/script/dada2_01_quality_plot.R</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># --------------------------------------------------------------- # This section</span>
-<span class="co"># corresponds to the Rscript dada2_01_quality_plot.R #</span>
-<span class="co"># --------------------------------------------------------------- #</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Section corresponding to the Rscript dada2_01_quality_plot.R #</span>
+<span class="co"># ------------------------------------------------------------ #</span>
 
 
 <span class="co"># Some packages must be installed and loaded</span>
@@ -371,9 +370,8 @@ runs &lt;-<span class="st"> </span><span class="kw">sub</span>(<span class="st">
 <span class="ex">module</span> load r/4.0.3
 
 <span class="ex">srun</span> Rscript /shared/projects/indigene/PHYTOPORT/18SV4/script/dada2_02_filter_trim_a.R</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># ---------------------------------------------------------------- # This section</span>
-<span class="co"># corresponds to the Rscript dada2_02_filter_trim_a.R #</span>
-<span class="co"># ---------------------------------------------------------------- #</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Sction corresponding to the Rscript dada2_02_filter_trim_a.R #</span>
+<span class="co"># ------------------------------------------------------------ #</span>
 
 
 <span class="co"># Some packages must be installed and loaded</span>
@@ -466,9 +464,8 @@ filtpathR &lt;-<span class="st"> </span><span class="kw">file.path</span>(pathR,
 module load r<span class="op">/</span><span class="fl">4.0</span>.<span class="dv">3</span>
 
 srun Rscript <span class="op">/</span>shared<span class="op">/</span>projects<span class="op">/</span>indigene<span class="op">/</span>PHYTOPORT<span class="op">/</span>18SV4<span class="op">/</span>script<span class="op">/</span>dada2_02_filter_trim_b.R</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># ---------------------------------------------------------------- # This section</span>
-<span class="co"># corresponds to the Rscript dada2_02_filter_trim_b.R #</span>
-<span class="co"># ---------------------------------------------------------------- #</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Section corresponding to the Rscript dada2_02_filter_trim_b.R #</span>
+<span class="co"># ------------------------------------------------------------- #</span>
 
 
 <span class="co"># Some packages must be installed and loaded</span>
@@ -503,9 +500,8 @@ filter <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">d
 module load r<span class="op">/</span><span class="fl">4.0</span>.<span class="dv">3</span>
 
 srun Rscript <span class="op">/</span>shared<span class="op">/</span>projects<span class="op">/</span>indigene<span class="op">/</span>PHYTOPORT<span class="op">/</span>18SV4<span class="op">/</span>script<span class="op">/</span>dada2_03_learn_error.R</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># -------------------------------------------------------------- # This section</span>
-<span class="co"># corresponds to the Rscript dada2_03_learn_error.R #</span>
-<span class="co"># -------------------------------------------------------------- #</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Section corresponding to the Rscript dada2_03_learn_error.R #</span>
+<span class="co"># ----------------------------------------------------------- #</span>
 
 
 <span class="co"># Some packages must be installed and loaded</span>
@@ -658,9 +654,8 @@ sample.namesR.all &lt;-<span class="st"> </span><span class="kw">sub</span>(<spa
 module load r<span class="op">/</span><span class="fl">4.0</span>.<span class="dv">3</span>
 
 srun Rscript <span class="op">/</span>shared<span class="op">/</span>projects<span class="op">/</span>indigene<span class="op">/</span>PHYTOPORT<span class="op">/</span>18SV4<span class="op">/</span>script<span class="op">/</span>dada2_04_denoising_merging.R</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># -------------------------------------------------------------------- # This</span>
-<span class="co"># section corresponds to the Rscript dada2_04_denoising_merging.R #</span>
-<span class="co"># -------------------------------------------------------------------- #</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Section corresponding to the Rscript dada2_04_denoising_merging.R #</span>
+<span class="co"># ----------------------------------------------------------------- #</span>
 
 
 <span class="co"># Some packages must be installed and loaded</span>
@@ -801,9 +796,8 @@ filtErr &lt;-<span class="st"> </span><span class="kw">sort</span>(<span class="
 module load r<span class="op">/</span><span class="fl">4.0</span>.<span class="dv">3</span>
 
 srun Rscript <span class="op">/</span>shared<span class="op">/</span>projects<span class="op">/</span>indigene<span class="op">/</span>PHYTOPORT<span class="op">/</span>18SV4<span class="op">/</span>script<span class="op">/</span>dada2_05_chimeras.R</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># ----------------------------------------------------------- # This section</span>
-<span class="co"># corresponds to the Rscript dada2_05_chimeras.R #</span>
-<span class="co"># ---------------------------------------------- ------------ #</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Section corresponding to the Rscript dada2_05_chimeras.R #</span>
+<span class="co"># ------------------------------------------- ------------ #</span>
 
 <span class="co"># Some packages must be installed and loaded</span>
 <span class="kw">library</span>(dada2)
