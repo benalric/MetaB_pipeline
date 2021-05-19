@@ -59,7 +59,7 @@ It is important to get a feel for the quality of the data that we are using. To 
 | **NOTE:** Plots summarizing the quality of the reads are generated at sample scale. |
 | <sapn> |
 
-```bash
+```{bash}
 #!/bin/bash
 #SBATCH --job-name=dada2_01_quality_plot.qsub               # job name
 #SBATCH --mail-type=BEGIN,END                               # send a mail at the begining/end of job
@@ -174,7 +174,7 @@ srun Rscript /shared/projects/indigene/PHYTOPORT/18SV4/script/dada2_02_filter_tr
 
 ```{r, eval = FALSE}
 # Section corresponding to the Rscript dada2_02_filter_trim_a.R #
-# ------------------------------------------------------------ #
+# ------------------------------------------------------------- #
 
 
 # Some packages must be installed and loaded
@@ -241,7 +241,7 @@ sessionInfo()
 | **NOTE:** The script dada2_02_filter_trim_a.R produces for each sample one file .csv. Here we merge all files in one table with rows as samples and three columns  correspoding to sample names, reads.in, reads.out. |
 | <span> |
 
-```{r, eval = FALSE}
+```{bash}
 #!/bin/bash
 #SBATCH --job-name=dada2_02_filter_trim_b.qsub              # job name
 #SBATCH --mail-type=BEGIN,END                               # send a mail at the begining/end of job
@@ -285,7 +285,7 @@ sessionInfo()
 # Step 3: Learn error rates
 Errors can be introduced by PCR amplification and sequencing. In this part of the pipeline `dada2` will learn to distinguish error from biological differences using a subset of our data as a training set. The `learnErrors()` method learns this error model from the data, by alternating estimation of the error rates and inference of sample composition until they converge on a jointly consistent solution. he error parameters typically vary between sequencing runs and PCR protocols, so this method provides a way to estimate those parameters from the data itself.
 
-```{r, eval = FALSE}
+```{bash}
 #!/bin/bash
 #SBATCH --job-name=dada2_03_learn_error.qsub                # job name
 #SBATCH --mail-type=BEGIN,END                               # send a mail at the begining/end of job
@@ -405,7 +405,7 @@ Finally, we will merge the corresponding forqard and reverse reads to create a l
 | **NOTE:** Merging is performed by aligning the denoised forward reads with the reverse-compelment of the corresponding denoised reverse reads, and then constructing the merged "contig" sequences. By default, merged sequences are only output if the forward and reverse reads overlap by at least 12 bases, and are identical to each other in the overlap region. |
 | <sapn> |
 
-```{r, eval = FALSE}
+```{bash}
 #!/bin/bash
 #SBATCH --job-name=dada2_04_denoising_merging.qsub          # job name
 #SBATCH --mail-type=BEGIN,END                               # send a mail at the begining/end of job
@@ -539,7 +539,7 @@ Although `dada2` has searched for indel errors and substitutions, there may stil
 | **NOTE:** The chimera detection method has to be `pooled` instead of `consensus`. |
 | <span> |
 
-```{r, eval = FALSE}
+```{bash}
 #!/bin/bash
 #SBATCH --job-name=dada2_05_chimeras.qsub                   # job name
 #SBATCH --mail-type=BEGIN,END                               # send a mail at the begining/end of job
@@ -558,7 +558,8 @@ srun Rscript /shared/projects/indigene/PHYTOPORT/18SV4/script/dada2_05_chimeras.
 
 ```{r, eval = FALSE}
 # Section corresponding to the Rscript dada2_05_chimeras.R #
-# ------------------------------------------- ------------ #
+# -------------------------------------------------------- #
+
 
 # Some packages must be installed and loaded
 library(dada2); packageVersion("dada2")
@@ -617,4 +618,158 @@ fwrite(tmp, "/shared/projects/indigene/PHYTOPORT/18SV4/dada2/seqtab_all.tsv", se
 # Version of packages used to build this document
 sessionInfo()
 ```
-At this stage, you have on ASV table which is the final product of the `dada2` pipeline. In this ASV table each row corresponds to a processes sample, and each column corresponds to an non-chimeric sample sequence (a more precise analogue to the common "OTU table"). But, the sequences variants are not yet annoted, i.e. assigning a taxonomy to the sequence variants. The `dada2` package provides a native implementation of the [naive Bayesian classifer method](https://aem.asm.org/content/73/16/5261.long) for this purpose.
+
+| <span> |
+| :------------------------------------------------------------------------------------------------------------ |
+|**NOTE:** At this stage, you have on ASV table which is the final product of the `dada2` pipeline. In this ASV table each row corresponds to a processes sample, and each column corresponds to an non-chimeric sample sequence (a more precise analogue to the common "OTU table"). But, the sequences variants are not yet annoted, i.e. assigning a taxonomy to the sequence variants.|
+| <span> |
+
+
+# Step 9: Assign taxonomy
+The `dada2` package provides a native implementation of the [naive Bayesian classifer method](https://aem.asm.org/content/73/16/5261.long) for this purpose. But the recently developed `IdTaxa` taxonomic classification method, available via the [DECIPHER Bioconductor package](https://bioconductor.org/packages/release/bioc/html/DECIPHER.html) have [classification performance that is better than the long-time standard set by the naive Bayesian classifer](https://microbiomejournal.biomedcentral.com/articles/10.1186/s40168-018-0521-5). Hence, we used IDTAXA algorithm for taxonomic assignment.
+
+| <span> |
+| :------------------------------------------------------------------------------------------------------------ |
+| **NOTE:** Trained classifers are available from [http://DECIPHER.codes/Downloads.html](http://www2.decipher.codes/Downloads.html). Download the PR2 18S v4.13 and SILVA SSU r138 (modified).|
+| <sapn> |
+
+```{bash}
+#!/bin/bash
+#SBATCH --job-name=dada2_06_IdTaxa_pr2.qsub                 # job name
+#SBATCH --mail-type=BEGIN,END                               # send a mail at the end of job
+#SBATCH --mail-user=balric@sb-roscoff.fr                    # where to send mail
+#SBATCH --cpus-per-task 6                                   # number of CPUs required per task
+#SBATCH --mem 100GB                                         # memory per processor
+#SBATCH --workdir=/shared/projects/indigene/PHYTOPORT/18SV4	# set working directory
+#SBATCH -p fast                                             # partition
+#SBATCH -o dada2_06_IdTaxa_pr2.out                          # output file
+#SBATCH -e dada2_06_IdTaxa_pr2.err                          # error file
+
+module load r/4.0.3
+
+srun Rscript /shared/projects/indigene/PHYTOPORT/18SV4/script/dada2_06_IdTaxa_silva.R
+```
+
+```{r, eval = FALSE}
+# Section corresponding to the Rscript dada2_06_IdTaxa_pr2.R #
+# ---------------------------------------------------------- #
+
+
+# Some packages must be installed and loaded
+library(dada2); packageVersion("dada2")
+library(data.table)
+library(DECIPHER)
+
+
+# Define the following path variable so that it points to the extracted directory
+pathSeq <- "/shared/projects/indigene/PHYTOPORT/18SV4/dada2"
+pathRef <- "/shared/projects/indigene/refdb"
+
+# Load sequence table
+seqtab.nochim <- read.table(paste0(pathSeq, "/seqtab_all.tsv"), header = TRUE)
+
+# Load 18S rDNA references sequences data
+load(paste0(pathRef, "/PR2_v4_13_March2021.RData"))
+
+# Create a DNAStringSet from the ASVs
+seqvector <- as.character(seqtab.nochim$sequence)
+dna <- DNAStringSet(seqvector)
+
+# Add names to sequences
+dna@ranges@NAMES <- as.character(seqtab.nochim$amplicon)
+
+# Classify the sequences
+ids <- IdTaxa(dna, trainingSet, type = "extended", strand = "top", processors = 8, verbose = FALSE) # use all processors
+#fwrite(ids, "/shared/projects/indigene/PHYTOPORT/18SV4/dada2/seqtab_all_taxopr2.tsv", sep = "\t")
+save(ids, file = paste0(pathSeq, "/seqtab_all_taxopr2.rda"))
+
+# Version of packages used to build this document
+sessionInfo()
+```
+
+
+# Step 10: Final ASV table
+The ASV table and the taxonomy are merged together.
+
+```{bash}
+#!/bin/bash
+#SBATCH --job-name=dada2_07_ASV_table_pr2.qsub              # job name
+#SBATCH --mail-type=BEGIN,END                               # send a mail at the begining/end of job
+#SBATCH --mail-user=balric@sb-roscoff.fr                    # where to send mail
+#SBATCH --cpus-per-task 1                                   # number of CPUs required per task
+#SBATCH --mem 4GB                                           # memory per processor
+#SBATCH --workdir=/shared/projects/indigene/PHYTOPORT/18SV4 # set working directory
+#SBATCH -p fast                                             # partition
+#SBATCH -o dada2_07_ASV_table_pr2.out                       # output file
+#SBATCH -e dada2_07_ASV_table_pr2.err                       # error file
+
+module load r/4.0.3
+
+srun Rscript /shared/projects/indigene/PHYTOPORT/18SV4/script/dada2_07_ASV_table_pr2.R
+```
+
+```{r, eval = FALSE}
+# Section corresponding to the Rscript dada2_07_ASV_table_pr2.R #
+# ------------------------------------------------------------- #
+
+
+# Some packages must be installed and loaded
+library(dplyr)
+library(tidyr)
+library(data.table)
+
+
+# Useful function
+ASV_func <- function(annot, ASVt, id, vtot, vocc) {
+  # Calculate the abundance of each read 
+  total <- apply(ASVt[, grep(id, colnames(ASVt))], 1, sum)
+  # calculate the occurrence of each read
+  occurrence <- apply(ASVt[, grep(id, colnames(ASVt))], 1, function(x) sum(x > 0))
+  # Modify the shape of variables taxon, confidence and rank
+  for (i in 1:length(annot)) {
+    annot[[i]]$taxon <- paste(annot[[i]]$taxon, collapse = "|")
+    annot[[i]]$taxon <- sub("Root\\|", "", annot[[i]]$taxon)
+    annot[[i]]$confidence <- round(annot[[i]]$confidence[length(annot[[i]]$confidence)], digits = 1)
+    annot[[i]]$rank <- paste(annot[[i]]$rank, collapse = "|")
+    annot[[i]]$rank <- sub("rootrank\\|", "", annot[[i]]$rank)
+  }
+  # Make one data.table from a list and rename and reorder the columns of table
+  annot1 <- rbindlist(annot) %>%
+    mutate(amplicon = names(annot)) %>%
+    rename(identity = confidence, taxonomy = taxon) %>% 
+    relocate(amplicon, taxonomy, rank, identity)
+  # Merge for each ASv taxonomic annotation and abundance 
+  ASV_table <- merge(annot1, ASVt, by.x = "amplicon", by.y = "amplicon", all.x = TRUE) %>%
+    mutate(total = total) %>%
+    mutate(occurrence = occurrence) %>%
+    relocate(amplicon, taxonomy, rank, identity, sequence, total, occurrence, PHP_B8_190328_02_PHYTOPORT_Cut1:PHP_H42_200304_3_PHYTOPORT_Cut2)
+  # Vector with the name each sample
+  tmp <- grep(id, colnames(ASV_table), value = TRUE) %>% 
+    sub("_Cut\\d$", "", .) %>%
+    unique
+  # sum for each sample Cut1 and Cut2 values
+  for (i in tmp) {
+    x <- grep(i, colnames(ASV_table), value = TRUE)
+    ASV_table[, (i) := rowSums(.SD), .SDcols = x]
+    ASV_table[, (x) := NULL]
+  }
+  # 
+  setnames(ASV_table, sub(paste0("_", id), "", colnames(ASV_table)))
+  ASV_table_filtered <- ASV_table[total >= vtot & occurrence >= vocc][order(total, decreasing = TRUE)]
+  return(ASV_table_filtered)
+}
+
+# Define the following path variable so that it points to the extracted directory
+pathTab <- "/shared/projects/indigene/PHYTOPORT/18SV4/dada2"
+
+# Load taxonomy assignment table 
+load(paste0(pathTab, "/seqtab_all_taxopr2.rda"))
+seqtab_nochim <- read.table(paste0(pathTab, "/seqtab_all.tsv"), header = TRUE)
+
+# Building of the annotated ASV table
+ASV_phytoport_pr2 <- ASV_func(annot = ids, ASVt = seqtab_nochim, id = "PHYTOPORT", vtot = 2, vocc = 1)  
+fwrite(ASV_phytoport_pr2, "/shared/projects/indigene/PHYTOPORT/18SV4/dada2/seqtab_all_taxo_final.tsv", sep = "\t")  
+
+# Version of packages used to build this document
+sessionInfo()
+```

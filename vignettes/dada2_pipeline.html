@@ -7,7 +7,7 @@
 
         <meta name="author" content="Benjamin Alric" />
     
-        <meta name="date" content="2021-05-17" />
+        <meta name="date" content="2021-05-19" />
     
     <title>Tutorial for metabarcode analysis</title>
 
@@ -171,11 +171,13 @@
       <li><a href="#step-3-learn-error-rates"><span class="toc-section-number">5</span> Step 3: Learn error rates</a></li>
       <li><a href="#steps-4-7-denoising-and-merging"><span class="toc-section-number">6</span> Steps 4-7: Denoising, and merging</a></li>
       <li><a href="#step-8-remove-chimeras"><span class="toc-section-number">7</span> Step 8: Remove Chimeras</a></li>
+      <li><a href="#step-9-assign-taxonomy"><span class="toc-section-number">8</span> Step 9: Assign taxonomy</a></li>
+      <li><a href="#step-10-final-asv-table"><span class="toc-section-number">9</span> Step 10: Final ASV table</a></li>
       </ul>
     </div>
     <div id="postamble" data-toggle="wy-nav-shift" class="status">
                   <p class="author"><span class="glyphicon glyphicon-user"></span> Benjamin Alric</p>
-                        <p class="date"><span class="glyphicon glyphicon-calendar"></span> 2021-05-17</p>
+                        <p class="date"><span class="glyphicon glyphicon-calendar"></span> 2021-05-19</p>
           </div>
    </div>
    
@@ -371,7 +373,7 @@ runs &lt;-<span class="st"> </span><span class="kw">sub</span>(<span class="st">
 
 <span class="ex">srun</span> Rscript /shared/projects/indigene/PHYTOPORT/18SV4/script/dada2_02_filter_trim_a.R</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Section corresponding to the Rscript dada2_02_filter_trim_a.R #</span>
-<span class="co"># ------------------------------------------------------------ #</span>
+<span class="co"># ------------------------------------------------------------- #</span>
 
 
 <span class="co"># Some packages must be installed and loaded</span>
@@ -450,7 +452,7 @@ filtpathR &lt;-<span class="st"> </span><span class="kw">file.path</span>(pathR,
 </tr>
 </tbody>
 </table>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#!/bin/bash</span>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co">#!/bin/bash</span>
 <span class="co">#SBATCH --job-name=dada2_02_filter_trim_b.qsub              # job name</span>
 <span class="co">#SBATCH --mail-type=</span><span class="re">BEGIN</span><span class="co">,</span><span class="re">END</span><span class="co">                               # send a mail at the begining/end of job</span>
 <span class="co">#SBATCH --mail-user=balric@sb-roscoff.fr                    # where to send mail</span>
@@ -461,9 +463,9 @@ filtpathR &lt;-<span class="st"> </span><span class="kw">file.path</span>(pathR,
 <span class="co">#SBATCH -o dada2_02_filter_trim_b.out                       # output file</span>
 <span class="co">#SBATCH -e dada2_02_filter_trim_b.err                       # error file</span>
 
-module load r<span class="op">/</span><span class="fl">4.0</span>.<span class="dv">3</span>
+<span class="ex">module</span> load r/4.0.3
 
-srun Rscript <span class="op">/</span>shared<span class="op">/</span>projects<span class="op">/</span>indigene<span class="op">/</span>PHYTOPORT<span class="op">/</span>18SV4<span class="op">/</span>script<span class="op">/</span>dada2_02_filter_trim_b.R</code></pre></div>
+<span class="ex">srun</span> Rscript /shared/projects/indigene/PHYTOPORT/18SV4/script/dada2_02_filter_trim_b.R</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Section corresponding to the Rscript dada2_02_filter_trim_b.R #</span>
 <span class="co"># ------------------------------------------------------------- #</span>
 
@@ -486,7 +488,7 @@ filter <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">d
 <div id="step-3-learn-error-rates" class="section level1">
 <h1><span class="header-section-number">5</span> Step 3: Learn error rates</h1>
 <p>Errors can be introduced by PCR amplification and sequencing. In this part of the pipeline <code>dada2</code> will learn to distinguish error from biological differences using a subset of our data as a training set. The <code>learnErrors()</code> method learns this error model from the data, by alternating estimation of the error rates and inference of sample composition until they converge on a jointly consistent solution. he error parameters typically vary between sequencing runs and PCR protocols, so this method provides a way to estimate those parameters from the data itself.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#!/bin/bash</span>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co">#!/bin/bash</span>
 <span class="co">#SBATCH --job-name=dada2_03_learn_error.qsub                # job name</span>
 <span class="co">#SBATCH --mail-type=</span><span class="re">BEGIN</span><span class="co">,</span><span class="re">END</span><span class="co">                               # send a mail at the begining/end of job</span>
 <span class="co">#SBATCH --mail-user=balric@sb-roscoff.fr                    # where to send mail</span>
@@ -497,9 +499,9 @@ filter <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">d
 <span class="co">#SBATCH -o dada2_03_learn_error.out                         # output file</span>
 <span class="co">#SBATCH -e dada2_03_learn_error.err                         # error file</span>
 
-module load r<span class="op">/</span><span class="fl">4.0</span>.<span class="dv">3</span>
+<span class="ex">module</span> load r/4.0.3
 
-srun Rscript <span class="op">/</span>shared<span class="op">/</span>projects<span class="op">/</span>indigene<span class="op">/</span>PHYTOPORT<span class="op">/</span>18SV4<span class="op">/</span>script<span class="op">/</span>dada2_03_learn_error.R</code></pre></div>
+<span class="ex">srun</span> Rscript /shared/projects/indigene/PHYTOPORT/18SV4/script/dada2_03_learn_error.R</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Section corresponding to the Rscript dada2_03_learn_error.R #</span>
 <span class="co"># ----------------------------------------------------------- #</span>
 
@@ -640,7 +642,7 @@ sample.namesR.all &lt;-<span class="st"> </span><span class="kw">sub</span>(<spa
 </tr>
 </tbody>
 </table>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#!/bin/bash</span>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co">#!/bin/bash</span>
 <span class="co">#SBATCH --job-name=dada2_04_denoising_merging.qsub          # job name</span>
 <span class="co">#SBATCH --mail-type=</span><span class="re">BEGIN</span><span class="co">,</span><span class="re">END</span><span class="co">                               # send a mail at the begining/end of job</span>
 <span class="co">#SBATCH --mail-user=balric@sb-roscoff.fr                    # where to send mail</span>
@@ -651,9 +653,9 @@ sample.namesR.all &lt;-<span class="st"> </span><span class="kw">sub</span>(<spa
 <span class="co">#SBATCH -o dada2_04_denoising_merging.out                   # output file</span>
 <span class="co">#SBATCH -e dada2_04_denoising_merging.err                   # error file</span>
 
-module load r<span class="op">/</span><span class="fl">4.0</span>.<span class="dv">3</span>
+<span class="ex">module</span> load r/4.0.3
 
-srun Rscript <span class="op">/</span>shared<span class="op">/</span>projects<span class="op">/</span>indigene<span class="op">/</span>PHYTOPORT<span class="op">/</span>18SV4<span class="op">/</span>script<span class="op">/</span>dada2_04_denoising_merging.R</code></pre></div>
+<span class="ex">srun</span> Rscript /shared/projects/indigene/PHYTOPORT/18SV4/script/dada2_04_denoising_merging.R</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Section corresponding to the Rscript dada2_04_denoising_merging.R #</span>
 <span class="co"># ----------------------------------------------------------------- #</span>
 
@@ -782,7 +784,7 @@ filtErr &lt;-<span class="st"> </span><span class="kw">sort</span>(<span class="
 </tr>
 </tbody>
 </table>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#!/bin/bash</span>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co">#!/bin/bash</span>
 <span class="co">#SBATCH --job-name=dada2_05_chimeras.qsub                   # job name</span>
 <span class="co">#SBATCH --mail-type=</span><span class="re">BEGIN</span><span class="co">,</span><span class="re">END</span><span class="co">                               # send a mail at the begining/end of job</span>
 <span class="co">#SBATCH --mail-user=balric@sb-roscoff.fr                    # where to send mail</span>
@@ -793,11 +795,12 @@ filtErr &lt;-<span class="st"> </span><span class="kw">sort</span>(<span class="
 <span class="co">#SBATCH -o dada2_05_chimeras.out                            # output file</span>
 <span class="co">#SBATCH -e dada2_05_chimeras.err                            # error file</span>
 
-module load r<span class="op">/</span><span class="fl">4.0</span>.<span class="dv">3</span>
+<span class="ex">module</span> load r/4.0.3
 
-srun Rscript <span class="op">/</span>shared<span class="op">/</span>projects<span class="op">/</span>indigene<span class="op">/</span>PHYTOPORT<span class="op">/</span>18SV4<span class="op">/</span>script<span class="op">/</span>dada2_05_chimeras.R</code></pre></div>
+<span class="ex">srun</span> Rscript /shared/projects/indigene/PHYTOPORT/18SV4/script/dada2_05_chimeras.R</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Section corresponding to the Rscript dada2_05_chimeras.R #</span>
-<span class="co"># ------------------------------------------- ------------ #</span>
+<span class="co"># -------------------------------------------------------- #</span>
+
 
 <span class="co"># Some packages must be installed and loaded</span>
 <span class="kw">library</span>(dada2)
@@ -858,7 +861,180 @@ tmp &lt;-<span class="st"> </span><span class="kw">data.table</span>(<span class
 
 <span class="co"># Version of packages used to build this document</span>
 <span class="kw">sessionInfo</span>()</code></pre></div>
-<p>At this stage, you have on ASV table which is the final product of the <code>dada2</code> pipeline. In this ASV table each row corresponds to a processes sample, and each column corresponds to an non-chimeric sample sequence (a more precise analogue to the common &quot;OTU table&quot;). But, the sequences variants are not yet annoted, i.e. assigning a taxonomy to the sequence variants. The <code>dada2</code> package provides a native implementation of the <a href="https://aem.asm.org/content/73/16/5261.long">naive Bayesian classifer method</a> for this purpose.</p>
+<table>
+<colgroup>
+<col width="100%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"><span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>NOTE:</strong> At this stage, you have on ASV table which is the final product of the <code>dada2</code> pipeline. In this ASV table each row corresponds to a processes sample, and each column corresponds to an non-chimeric sample sequence (a more precise analogue to the common &quot;OTU table&quot;). But, the sequences variants are not yet annoted, i.e. assigning a taxonomy to the sequence variants.</td>
+</tr>
+<tr class="even">
+<td align="left"><span></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="step-9-assign-taxonomy" class="section level1">
+<h1><span class="header-section-number">8</span> Step 9: Assign taxonomy</h1>
+<p>The <code>dada2</code> package provides a native implementation of the <a href="https://aem.asm.org/content/73/16/5261.long">naive Bayesian classifer method</a> for this purpose. But the recently developed <code>IdTaxa</code> taxonomic classification method, available via the <a href="https://bioconductor.org/packages/release/bioc/html/DECIPHER.html">DECIPHER Bioconductor package</a> have <a href="https://microbiomejournal.biomedcentral.com/articles/10.1186/s40168-018-0521-5">classification performance that is better than the long-time standard set by the naive Bayesian classifer</a>. Hence, we used IDTAXA algorithm for taxonomic assignment.</p>
+<table>
+<colgroup>
+<col width="100%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"><span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>NOTE:</strong> Trained classifers are available from <a href="http://www2.decipher.codes/Downloads.html">http://DECIPHER.codes/Downloads.html</a>. Download the PR2 18S v4.13 and SILVA SSU r138 (modified).</td>
+</tr>
+<tr class="even">
+<td align="left"><sapn></td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co">#!/bin/bash</span>
+<span class="co">#SBATCH --job-name=dada2_06_IdTaxa_pr2.qsub                 # job name</span>
+<span class="co">#SBATCH --mail-type=</span><span class="re">BEGIN</span><span class="co">,</span><span class="re">END</span><span class="co">                               # send a mail at the end of job</span>
+<span class="co">#SBATCH --mail-user=balric@sb-roscoff.fr                    # where to send mail</span>
+<span class="co">#SBATCH --cpus-per-task 6                                   # number of CPUs required per task</span>
+<span class="co">#SBATCH --mem 100GB                                         # memory per processor</span>
+<span class="co">#SBATCH --workdir=/shared/projects/indigene/PHYTOPORT/18SV4 # set working directory</span>
+<span class="co">#SBATCH -p fast                                             # partition</span>
+<span class="co">#SBATCH -o dada2_06_IdTaxa_pr2.out                          # output file</span>
+<span class="co">#SBATCH -e dada2_06_IdTaxa_pr2.err                          # error file</span>
+
+<span class="ex">module</span> load r/4.0.3
+
+<span class="ex">srun</span> Rscript /shared/projects/indigene/PHYTOPORT/18SV4/script/dada2_06_IdTaxa_silva.R</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Section corresponding to the Rscript dada2_06_IdTaxa_pr2.R #</span>
+<span class="co"># ---------------------------------------------------------- #</span>
+
+
+<span class="co"># Some packages must be installed and loaded</span>
+<span class="kw">library</span>(dada2)
+<span class="kw">packageVersion</span>(<span class="st">&quot;dada2&quot;</span>)
+<span class="kw">library</span>(data.table)
+<span class="kw">library</span>(DECIPHER)
+
+
+<span class="co"># Define the following path variable so that it points to the extracted directory</span>
+pathSeq &lt;-<span class="st"> &quot;/shared/projects/indigene/PHYTOPORT/18SV4/dada2&quot;</span>
+pathRef &lt;-<span class="st"> &quot;/shared/projects/indigene/refdb&quot;</span>
+
+<span class="co"># Load sequence table</span>
+seqtab.nochim &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="kw">paste0</span>(pathSeq, <span class="st">&quot;/seqtab_all.tsv&quot;</span>), <span class="dt">header =</span> <span class="ot">TRUE</span>)
+
+<span class="co"># Load 18S rDNA references sequences data</span>
+<span class="kw">load</span>(<span class="kw">paste0</span>(pathRef, <span class="st">&quot;/PR2_v4_13_March2021.RData&quot;</span>))
+
+<span class="co"># Create a DNAStringSet from the ASVs</span>
+seqvector &lt;-<span class="st"> </span><span class="kw">as.character</span>(seqtab.nochim<span class="op">$</span>sequence)
+dna &lt;-<span class="st"> </span><span class="kw">DNAStringSet</span>(seqvector)
+
+<span class="co"># Add names to sequences</span>
+dna<span class="op">@</span>ranges<span class="op">@</span>NAMES &lt;-<span class="st"> </span><span class="kw">as.character</span>(seqtab.nochim<span class="op">$</span>amplicon)
+
+<span class="co"># Classify the sequences</span>
+ids &lt;-<span class="st"> </span><span class="kw">IdTaxa</span>(dna, trainingSet, <span class="dt">type =</span> <span class="st">&quot;extended&quot;</span>, <span class="dt">strand =</span> <span class="st">&quot;top&quot;</span>, <span class="dt">processors =</span> <span class="dv">8</span>, 
+    <span class="dt">verbose =</span> <span class="ot">FALSE</span>)  <span class="co"># use all processors</span>
+<span class="co"># fwrite(ids,</span>
+<span class="co"># '/shared/projects/indigene/PHYTOPORT/18SV4/dada2/seqtab_all_taxopr2.tsv', sep =</span>
+<span class="co"># '\t')</span>
+<span class="kw">save</span>(ids, <span class="dt">file =</span> <span class="kw">paste0</span>(pathSeq, <span class="st">&quot;/seqtab_all_taxopr2.rda&quot;</span>))
+
+<span class="co"># Version of packages used to build this document</span>
+<span class="kw">sessionInfo</span>()</code></pre></div>
+</div>
+<div id="step-10-final-asv-table" class="section level1">
+<h1><span class="header-section-number">9</span> Step 10: Final ASV table</h1>
+<p>The ASV table and the taxonomy are merged together.</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co">#!/bin/bash</span>
+<span class="co">#SBATCH --job-name=dada2_07_ASV_table_pr2.qsub              # job name</span>
+<span class="co">#SBATCH --mail-type=</span><span class="re">BEGIN</span><span class="co">,</span><span class="re">END</span><span class="co">                               # send a mail at the begining/end of job</span>
+<span class="co">#SBATCH --mail-user=balric@sb-roscoff.fr                    # where to send mail</span>
+<span class="co">#SBATCH --cpus-per-task 1                                   # number of CPUs required per task</span>
+<span class="co">#SBATCH --mem 4GB                                           # memory per processor</span>
+<span class="co">#SBATCH --workdir=/shared/projects/indigene/PHYTOPORT/18SV4 # set working directory</span>
+<span class="co">#SBATCH -p fast                                             # partition</span>
+<span class="co">#SBATCH -o dada2_07_ASV_table_pr2.out                       # output file</span>
+<span class="co">#SBATCH -e dada2_07_ASV_table_pr2.err                       # error file</span>
+
+<span class="ex">module</span> load r/4.0.3
+
+<span class="ex">srun</span> Rscript /shared/projects/indigene/PHYTOPORT/18SV4/script/dada2_07_ASV_table_pr2.R</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Section corresponding to the Rscript dada2_07_ASV_table_pr2.R #</span>
+<span class="co"># ------------------------------------------------------------- #</span>
+
+
+<span class="co"># Some packages must be installed and loaded</span>
+<span class="kw">library</span>(dplyr)
+<span class="kw">library</span>(tidyr)
+<span class="kw">library</span>(data.table)
+
+
+<span class="co"># Useful function</span>
+ASV_func &lt;-<span class="st"> </span><span class="cf">function</span>(annot, ASVt, id, vtot, vocc) {
+    <span class="co"># Calculate the abundance of each read</span>
+    total &lt;-<span class="st"> </span><span class="kw">apply</span>(ASVt[, <span class="kw">grep</span>(id, <span class="kw">colnames</span>(ASVt))], <span class="dv">1</span>, sum)
+    <span class="co"># calculate the occurrence of each read</span>
+    occurrence &lt;-<span class="st"> </span><span class="kw">apply</span>(ASVt[, <span class="kw">grep</span>(id, <span class="kw">colnames</span>(ASVt))], <span class="dv">1</span>, <span class="cf">function</span>(x) <span class="kw">sum</span>(x <span class="op">&gt;</span><span class="st"> </span>
+<span class="st">        </span><span class="dv">0</span>))
+    <span class="co"># Modify the shape of variables taxon, confidence and rank</span>
+    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(annot)) {
+        annot[[i]]<span class="op">$</span>taxon &lt;-<span class="st"> </span><span class="kw">paste</span>(annot[[i]]<span class="op">$</span>taxon, <span class="dt">collapse =</span> <span class="st">&quot;|&quot;</span>)
+        annot[[i]]<span class="op">$</span>taxon &lt;-<span class="st"> </span><span class="kw">sub</span>(<span class="st">&quot;Root</span><span class="ch">\\</span><span class="st">|&quot;</span>, <span class="st">&quot;&quot;</span>, annot[[i]]<span class="op">$</span>taxon)
+        annot[[i]]<span class="op">$</span>confidence &lt;-<span class="st"> </span><span class="kw">round</span>(annot[[i]]<span class="op">$</span>confidence[<span class="kw">length</span>(annot[[i]]<span class="op">$</span>confidence)], 
+            <span class="dt">digits =</span> <span class="dv">1</span>)
+        annot[[i]]<span class="op">$</span>rank &lt;-<span class="st"> </span><span class="kw">paste</span>(annot[[i]]<span class="op">$</span>rank, <span class="dt">collapse =</span> <span class="st">&quot;|&quot;</span>)
+        annot[[i]]<span class="op">$</span>rank &lt;-<span class="st"> </span><span class="kw">sub</span>(<span class="st">&quot;rootrank</span><span class="ch">\\</span><span class="st">|&quot;</span>, <span class="st">&quot;&quot;</span>, annot[[i]]<span class="op">$</span>rank)
+    }
+    <span class="co"># Make one data.table from a list and rename and reorder the columns of table</span>
+    annot1 &lt;-<span class="st"> </span><span class="kw">rbindlist</span>(annot) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">amplicon =</span> <span class="kw">names</span>(annot)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">identity =</span> confidence, 
+        <span class="dt">taxonomy =</span> taxon) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">relocate</span>(amplicon, taxonomy, rank, identity)
+    <span class="co"># Merge for each ASv taxonomic annotation and abundance</span>
+    ASV_table &lt;-<span class="st"> </span><span class="kw">merge</span>(annot1, ASVt, <span class="dt">by.x =</span> <span class="st">&quot;amplicon&quot;</span>, <span class="dt">by.y =</span> <span class="st">&quot;amplicon&quot;</span>, <span class="dt">all.x =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">        </span><span class="kw">mutate</span>(<span class="dt">total =</span> total) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">occurrence =</span> occurrence) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">relocate</span>(amplicon, 
+        taxonomy, rank, identity, sequence, total, occurrence, PHP_B8_190328_02_PHYTOPORT_Cut1<span class="op">:</span>PHP_H42_200304_3_PHYTOPORT_Cut2)
+    <span class="co"># Vector with the name each sample</span>
+    tmp &lt;-<span class="st"> </span><span class="kw">grep</span>(id, <span class="kw">colnames</span>(ASV_table), <span class="dt">value =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sub</span>(<span class="st">&quot;_Cut</span><span class="ch">\\</span><span class="st">d$&quot;</span>, <span class="st">&quot;&quot;</span>, .) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">        </span>unique
+    <span class="co"># sum for each sample Cut1 and Cut2 values</span>
+    <span class="cf">for</span> (i <span class="cf">in</span> tmp) {
+        x &lt;-<span class="st"> </span><span class="kw">grep</span>(i, <span class="kw">colnames</span>(ASV_table), <span class="dt">value =</span> <span class="ot">TRUE</span>)
+        ASV_table[, <span class="st">`</span><span class="dt">:=</span><span class="st">`</span>((i), <span class="kw">rowSums</span>(.SD)), .SDcols =<span class="st"> </span>x]
+        ASV_table[, <span class="st">`</span><span class="dt">:=</span><span class="st">`</span>((x), <span class="ot">NULL</span>)]
+    }
+    <span class="co"># </span>
+    <span class="kw">setnames</span>(ASV_table, <span class="kw">sub</span>(<span class="kw">paste0</span>(<span class="st">&quot;_&quot;</span>, id), <span class="st">&quot;&quot;</span>, <span class="kw">colnames</span>(ASV_table)))
+    ASV_table_filtered &lt;-<span class="st"> </span>ASV_table[total <span class="op">&gt;=</span><span class="st"> </span>vtot <span class="op">&amp;</span><span class="st"> </span>occurrence <span class="op">&gt;=</span><span class="st"> </span>vocc][<span class="kw">order</span>(total, 
+        <span class="dt">decreasing =</span> <span class="ot">TRUE</span>)]
+    <span class="kw">return</span>(ASV_table_filtered)
+}
+
+<span class="co"># Define the following path variable so that it points to the extracted directory</span>
+pathTab &lt;-<span class="st"> &quot;/shared/projects/indigene/PHYTOPORT/18SV4/dada2&quot;</span>
+
+<span class="co"># Load taxonomy assignment table</span>
+<span class="kw">load</span>(<span class="kw">paste0</span>(pathTab, <span class="st">&quot;/seqtab_all_taxopr2.rda&quot;</span>))
+seqtab_nochim &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="kw">paste0</span>(pathTab, <span class="st">&quot;/seqtab_all.tsv&quot;</span>), <span class="dt">header =</span> <span class="ot">TRUE</span>)
+
+<span class="co"># Building of the annotated ASV table</span>
+ASV_phytoport_pr2 &lt;-<span class="st"> </span><span class="kw">ASV_func</span>(<span class="dt">annot =</span> ids, <span class="dt">ASVt =</span> seqtab_nochim, <span class="dt">id =</span> <span class="st">&quot;PHYTOPORT&quot;</span>, 
+    <span class="dt">vtot =</span> <span class="dv">2</span>, <span class="dt">vocc =</span> <span class="dv">1</span>)
+<span class="kw">fwrite</span>(ASV_phytoport_pr2, <span class="st">&quot;/shared/projects/indigene/PHYTOPORT/18SV4/dada2/seqtab_all_taxo_final.tsv&quot;</span>, 
+    <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>)
+
+<span class="co"># Version of packages used to build this document</span>
+<span class="kw">sessionInfo</span>()</code></pre></div>
 </div>
 </div>
 
