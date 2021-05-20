@@ -7,7 +7,7 @@
 
         <meta name="author" content="Benjamin Alric" />
     
-        <meta name="date" content="2021-05-19" />
+        <meta name="date" content="2021-05-20" />
     
     <title>Tutorial for metabarcode analysis</title>
 
@@ -177,7 +177,7 @@
     </div>
     <div id="postamble" data-toggle="wy-nav-shift" class="status">
                   <p class="author"><span class="glyphicon glyphicon-user"></span> Benjamin Alric</p>
-                        <p class="date"><span class="glyphicon glyphicon-calendar"></span> 2021-05-19</p>
+                        <p class="date"><span class="glyphicon glyphicon-calendar"></span> 2021-05-20</p>
           </div>
    </div>
    
@@ -998,7 +998,7 @@ ASV_func &lt;-<span class="st"> </span><span class="cf">function</span>(annot, A
         annot[[i]]<span class="op">$</span>rank &lt;-<span class="st"> </span><span class="kw">sub</span>(<span class="st">&quot;rootrank</span><span class="ch">\\</span><span class="st">|&quot;</span>, <span class="st">&quot;&quot;</span>, annot[[i]]<span class="op">$</span>rank)
     }
     <span class="co"># Make one data.table from a list and rename and reorder the columns of table</span>
-    annot1 &lt;-<span class="st"> </span><span class="kw">rbindlist</span>(annot) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">amplicon =</span> <span class="kw">names</span>(annot)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">identity =</span> confidence, 
+    annot1 &lt;-<span class="st"> </span><span class="kw">rbindlist</span>(annot) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">amplicon =</span> <span class="kw">names</span>(annot)) <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="dt">identity =</span> confidence, 
         <span class="dt">taxonomy =</span> taxon) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">relocate</span>(amplicon, taxonomy, rank, identity)
     <span class="co"># Merge for each ASv taxonomic annotation and abundance</span>
     ASV_table &lt;-<span class="st"> </span><span class="kw">merge</span>(annot1, ASVt, <span class="dt">by.x =</span> <span class="st">&quot;amplicon&quot;</span>, <span class="dt">by.y =</span> <span class="st">&quot;amplicon&quot;</span>, <span class="dt">all.x =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span>

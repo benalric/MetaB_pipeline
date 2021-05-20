@@ -736,7 +736,7 @@ ASV_func <- function(annot, ASVt, id, vtot, vocc) {
   # Make one data.table from a list and rename and reorder the columns of table
   annot1 <- rbindlist(annot) %>%
     mutate(amplicon = names(annot)) %>%
-    rename(identity = confidence, taxonomy = taxon) %>% 
+    dplyr::rename(identity = confidence, taxonomy = taxon) %>% 
     relocate(amplicon, taxonomy, rank, identity)
   # Merge for each ASv taxonomic annotation and abundance 
   ASV_table <- merge(annot1, ASVt, by.x = "amplicon", by.y = "amplicon", all.x = TRUE) %>%
