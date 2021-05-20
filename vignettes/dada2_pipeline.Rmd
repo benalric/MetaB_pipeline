@@ -6,8 +6,9 @@ header-includes:
   - \usepackage{color, fancyvrb}
 output:
   rmdformats::readthedown:
-    highlight: kate
+    highlight: tango
     number_section: yes
+    css: custom.css
 ---
 
 
