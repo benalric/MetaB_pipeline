@@ -7,7 +7,7 @@
 
         <meta name="author" content="Benjamin Alric" />
     
-        <meta name="date" content="2021-05-20" />
+        <meta name="date" content="2021-06-17" />
     
     <title>Tutorial for metabarcode analysis</title>
 
@@ -169,13 +169,15 @@
       <li><a href="#step-3-learn-error-rates"><span class="toc-section-number">5</span> Step 3: Learn error rates</a></li>
       <li><a href="#steps-4-7-denoising-and-merging"><span class="toc-section-number">6</span> Steps 4-7: Denoising, and merging</a></li>
       <li><a href="#step-8-remove-chimeras"><span class="toc-section-number">7</span> Step 8: Remove Chimeras</a></li>
-      <li><a href="#step-9-assign-taxonomy"><span class="toc-section-number">8</span> Step 9: Assign taxonomy</a></li>
+      <li><a href="#step-9-assign-taxonomy"><span class="toc-section-number">8</span> Step 9: Assign taxonomy</a><ul>
+      <li><a href="#naive-bayesian-classifier-method"><span class="toc-section-number">8.1</span> Naive Bayesian classifier method</a></li>
+      </ul></li>
       <li><a href="#step-10-final-asv-table"><span class="toc-section-number">9</span> Step 10: Final ASV table</a></li>
       </ul>
     </div>
     <div id="postamble" data-toggle="wy-nav-shift" class="status">
                   <p class="author"><span class="glyphicon glyphicon-user"></span> Benjamin Alric</p>
-                        <p class="date"><span class="glyphicon glyphicon-calendar"></span> 2021-05-20</p>
+                        <p class="date"><span class="glyphicon glyphicon-calendar"></span> 2021-06-17</p>
           </div>
    </div>
    
@@ -880,7 +882,27 @@ tmp &lt;-<span class="st"> </span><span class="kw">data.table</span>(<span class
 </div>
 <div id="step-9-assign-taxonomy" class="section level1">
 <h1><span class="header-section-number">8</span> Step 9: Assign taxonomy</h1>
-<p>The <code>dada2</code> package provides a native implementation of the <a href="https://aem.asm.org/content/73/16/5261.long">naive Bayesian classifer method</a> for this purpose. But the recently developed <code>IdTaxa</code> taxonomic classification method, available via the <a href="https://bioconductor.org/packages/release/bioc/html/DECIPHER.html">DECIPHER Bioconductor package</a> have <a href="https://microbiomejournal.biomedcentral.com/articles/10.1186/s40168-018-0521-5">classification performance that is better than the long-time standard set by the naive Bayesian classifer</a>. Hence, we used IDTAXA algorithm for taxonomic assignment.</p>
+<p>The <code>dada2</code> package provides a native implementation of the <a href="https://aem.asm.org/content/73/16/5261.long">naive Bayesian classifer method</a> for this purpose. But the recently developed <code>IdTaxa</code> taxonomic classification method, available via the <a href="https://bioconductor.org/packages/release/bioc/html/DECIPHER.html">DECIPHER Bioconductor package</a> have <a href="https://microbiomejournal.biomedcentral.com/articles/10.1186/s40168-018-0521-5">classification performance that is better than the long-time standard set by the naive Bayesian classifer</a>. Hence, we used IDTAXA algorithm for taxonomic assignment. Here we used both <code>naive Bayesian classifer</code> and <code>IdTaxa</code> method for taxonomic assignmnet.</p>
+<div id="naive-bayesian-classifier-method" class="section level2">
+<h2><span class="header-section-number">8.1</span> Naive Bayesian classifier method</h2>
+<table>
+<colgroup>
+<col width="100%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"><span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>NOTE:</strong> Trained classifers are available from <a href="http://www2.decipher.codes/Downloads.html">http://DECIPHER.codes/Downloads.html</a>. Download the PR2 18S v4.13 and SILVA SSU r138 (modified).</td>
+</tr>
+<tr class="even">
+<td align="left"><sapn></td>
+</tr>
+</tbody>
+</table>
 <table>
 <colgroup>
 <col width="100%"></col>
@@ -952,6 +974,7 @@ ids &lt;-<span class="st"> </span><span class="kw">IdTaxa</span>(dna, trainingSe
 <span class="co"># Version of packages used to build this document</span>
 <span class="kw">sessionInfo</span>()</code></pre></div>
 </div>
+</div>
 <div id="step-10-final-asv-table" class="section level1">
 <h1><span class="header-section-number">9</span> Step 10: Final ASV table</h1>
 <p>The ASV table and the taxonomy are merged together.</p>
@@ -981,11 +1004,10 @@ ids &lt;-<span class="st"> </span><span class="kw">IdTaxa</span>(dna, trainingSe
 
 <span class="co"># Useful function</span>
 ASV_func &lt;-<span class="st"> </span><span class="cf">function</span>(annot, ASVt, id, vtot, vocc) {
+    <span class="co"># Put amplicon variable as factor in ASVT table</span>
+    ASVt<span class="op">$</span>amplicon &lt;-<span class="st"> </span><span class="kw">factor</span>(ASVt<span class="op">$</span>amplicon, <span class="dt">levels =</span> ASVt<span class="op">$</span>amplicon)
     <span class="co"># Calculate the abundance of each read</span>
     total &lt;-<span class="st"> </span><span class="kw">apply</span>(ASVt[, <span class="kw">grep</span>(id, <span class="kw">colnames</span>(ASVt))], <span class="dv">1</span>, sum)
-    <span class="co"># calculate the occurrence of each read</span>
-    occurrence &lt;-<span class="st"> </span><span class="kw">apply</span>(ASVt[, <span class="kw">grep</span>(id, <span class="kw">colnames</span>(ASVt))], <span class="dv">1</span>, <span class="cf">function</span>(x) <span class="kw">sum</span>(x <span class="op">&gt;</span><span class="st"> </span>
-<span class="st">        </span><span class="dv">0</span>))
     <span class="co"># Modify the shape of variables taxon, confidence and rank</span>
     <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(annot)) {
         annot[[i]]<span class="op">$</span>taxon &lt;-<span class="st"> </span><span class="kw">paste</span>(annot[[i]]<span class="op">$</span>taxon, <span class="dt">collapse =</span> <span class="st">&quot;|&quot;</span>)
@@ -997,11 +1019,10 @@ ASV_func &lt;-<span class="st"> </span><span class="cf">function</span>(annot, A
     }
     <span class="co"># Make one data.table from a list and rename and reorder the columns of table</span>
     annot1 &lt;-<span class="st"> </span><span class="kw">rbindlist</span>(annot) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">amplicon =</span> <span class="kw">names</span>(annot)) <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="dt">identity =</span> confidence, 
-        <span class="dt">taxonomy =</span> taxon) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">relocate</span>(amplicon, taxonomy, rank, identity)
+        <span class="dt">taxonomy =</span> taxon) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">relocate</span>(amplicon, taxonomy, rank, identity) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">amplicon =</span> <span class="kw">factor</span>(amplicon, 
+        <span class="dt">levels =</span> amplicon))
     <span class="co"># Merge for each ASv taxonomic annotation and abundance</span>
-    ASV_table &lt;-<span class="st"> </span><span class="kw">merge</span>(annot1, ASVt, <span class="dt">by.x =</span> <span class="st">&quot;amplicon&quot;</span>, <span class="dt">by.y =</span> <span class="st">&quot;amplicon&quot;</span>, <span class="dt">all.x =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">        </span><span class="kw">mutate</span>(<span class="dt">total =</span> total) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">occurrence =</span> occurrence) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">relocate</span>(amplicon, 
-        taxonomy, rank, identity, sequence, total, occurrence, PHP_B8_190328_02_PHYTOPORT_Cut1<span class="op">:</span>PHP_H42_200304_3_PHYTOPORT_Cut2)
+    ASV_table &lt;-<span class="st"> </span><span class="kw">merge</span>(annot1, ASVt, <span class="dt">by.x =</span> <span class="st">&quot;amplicon&quot;</span>, <span class="dt">by.y =</span> <span class="st">&quot;amplicon&quot;</span>, <span class="dt">all.x =</span> <span class="ot">TRUE</span>)
     <span class="co"># Vector with the name each sample</span>
     tmp &lt;-<span class="st"> </span><span class="kw">grep</span>(id, <span class="kw">colnames</span>(ASV_table), <span class="dt">value =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sub</span>(<span class="st">&quot;_Cut</span><span class="ch">\\</span><span class="st">d$&quot;</span>, <span class="st">&quot;&quot;</span>, .) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">        </span>unique
@@ -1011,10 +1032,20 @@ ASV_func &lt;-<span class="st"> </span><span class="cf">function</span>(annot, A
         ASV_table[, <span class="st">`</span><span class="dt">:=</span><span class="st">`</span>((i), <span class="kw">rowSums</span>(.SD)), .SDcols =<span class="st"> </span>x]
         ASV_table[, <span class="st">`</span><span class="dt">:=</span><span class="st">`</span>((x), <span class="ot">NULL</span>)]
     }
-    <span class="co"># </span>
+    <span class="co"># Put ASV table to data.frame format</span>
+    ASV_table &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(ASV_table)
+    <span class="co"># calculate the occurrence of each read</span>
+    occurrence &lt;-<span class="st"> </span><span class="kw">apply</span>(ASV_table[, <span class="kw">grep</span>(id, <span class="kw">colnames</span>(ASV_table))], <span class="dv">1</span>, <span class="cf">function</span>(x) <span class="kw">sum</span>(x <span class="op">&gt;</span><span class="st"> </span>
+<span class="st">        </span><span class="dv">0</span>))
+    <span class="co"># Harmonization of ASV table</span>
+    ASV_table &lt;-<span class="st"> </span>ASV_table <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">total =</span> total) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">occurrence =</span> occurrence) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">        </span><span class="kw">relocate</span>(amplicon, taxonomy, rank, identity, sequence, total, occurrence, 
+            <span class="kw">colnames</span>(ASV_table)[<span class="kw">grep</span>(id, <span class="kw">colnames</span>(ASV_table))])
+    <span class="co"># Remove ASVs with total and occurrence below a given threshold</span>
     <span class="kw">setnames</span>(ASV_table, <span class="kw">sub</span>(<span class="kw">paste0</span>(<span class="st">&quot;_&quot;</span>, id), <span class="st">&quot;&quot;</span>, <span class="kw">colnames</span>(ASV_table)))
-    ASV_table_filtered &lt;-<span class="st"> </span>ASV_table[total <span class="op">&gt;=</span><span class="st"> </span>vtot <span class="op">&amp;</span><span class="st"> </span>occurrence <span class="op">&gt;=</span><span class="st"> </span>vocc][<span class="kw">order</span>(total, 
-        <span class="dt">decreasing =</span> <span class="ot">TRUE</span>)]
+    ASV_table_filtered &lt;-<span class="st"> </span>ASV_table[total <span class="op">&gt;=</span><span class="st"> </span>vtot <span class="op">&amp;</span><span class="st"> </span>occurrence <span class="op">&gt;=</span><span class="st"> </span>vocc, ]
+    ASV_table_filtered &lt;-<span class="st"> </span>ASV_table_filtered[<span class="kw">order</span>(ASV_table_filtered<span class="op">$</span>total, <span class="dt">decreasing =</span> <span class="ot">TRUE</span>), 
+        ]
     <span class="kw">return</span>(ASV_table_filtered)
 }
 
