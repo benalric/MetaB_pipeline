@@ -628,6 +628,14 @@ sessionInfo()
 
 # Step 9: Assign taxonomy
 The `dada2` package provides a native implementation of the [naive Bayesian classifer method](https://aem.asm.org/content/73/16/5261.long) for this purpose. But the recently developed `IdTaxa` taxonomic classification method, available via the [DECIPHER Bioconductor package](https://bioconductor.org/packages/release/bioc/html/DECIPHER.html) have [classification performance that is better than the long-time standard set by the naive Bayesian classifer](https://microbiomejournal.biomedcentral.com/articles/10.1186/s40168-018-0521-5). Hence, we used IDTAXA algorithm for taxonomic assignment.
+Here we used both `naive Bayesian classifer` and `IdTaxa` method for taxonomic assignmnet.
+
+## Naive Bayesian classifier method
+| <span> |
+| :------------------------------------------------------------------------------------------------------------ |
+| **NOTE:** Trained classifers are available from [http://DECIPHER.codes/Downloads.html](http://www2.decipher.codes/Downloads.html). Download the PR2 18S v4.13 and SILVA SSU r138 (modified).|
+| <sapn> |
+
 
 | <span> |
 | :------------------------------------------------------------------------------------------------------------ |
@@ -722,10 +730,10 @@ library(data.table)
 
 # Useful function
 ASV_func <- function(annot, ASVt, id, vtot, vocc) {
+  # Put amplicon variable as factor in ASVT table
+  ASVt$amplicon <- factor(ASVt$amplicon, levels = ASVt$amplicon) 
   # Calculate the abundance of each read 
   total <- apply(ASVt[, grep(id, colnames(ASVt))], 1, sum)
-  # calculate the occurrence of each read
-  occurrence <- apply(ASVt[, grep(id, colnames(ASVt))], 1, function(x) sum(x > 0))
   # Modify the shape of variables taxon, confidence and rank
   for (i in 1:length(annot)) {
     annot[[i]]$taxon <- paste(annot[[i]]$taxon, collapse = "|")
@@ -738,12 +746,10 @@ ASV_func <- function(annot, ASVt, id, vtot, vocc) {
   annot1 <- rbindlist(annot) %>%
     mutate(amplicon = names(annot)) %>%
     dplyr::rename(identity = confidence, taxonomy = taxon) %>% 
-    relocate(amplicon, taxonomy, rank, identity)
+    relocate(amplicon, taxonomy, rank, identity) %>%
+    mutate(amplicon = factor(amplicon, levels = amplicon))
   # Merge for each ASv taxonomic annotation and abundance 
-  ASV_table <- merge(annot1, ASVt, by.x = "amplicon", by.y = "amplicon", all.x = TRUE) %>%
-    mutate(total = total) %>%
-    mutate(occurrence = occurrence) %>%
-    relocate(amplicon, taxonomy, rank, identity, sequence, total, occurrence, PHP_B8_190328_02_PHYTOPORT_Cut1:PHP_H42_200304_3_PHYTOPORT_Cut2)
+  ASV_table <- merge(annot1, ASVt, by.x = "amplicon", by.y = "amplicon", all.x = TRUE)
   # Vector with the name each sample
   tmp <- grep(id, colnames(ASV_table), value = TRUE) %>% 
     sub("_Cut\\d$", "", .) %>%
@@ -754,9 +760,19 @@ ASV_func <- function(annot, ASVt, id, vtot, vocc) {
     ASV_table[, (i) := rowSums(.SD), .SDcols = x]
     ASV_table[, (x) := NULL]
   }
-  # 
+  # Put ASV table to data.frame format
+  ASV_table <- as.data.frame(ASV_table)
+  # calculate the occurrence of each read
+  occurrence <- apply(ASV_table[, grep(id, colnames(ASV_table))], 1, function(x) sum(x > 0))
+  # Harmonization of ASV table
+  ASV_table <- ASV_table %>%
+    mutate(total = total) %>%
+    mutate(occurrence = occurrence) %>%
+    relocate(amplicon, taxonomy, rank, identity, sequence, total, occurrence, colnames(ASV_table)[grep(id, colnames(ASV_table))])
+  # Remove ASVs with total and occurrence below a given threshold
   setnames(ASV_table, sub(paste0("_", id), "", colnames(ASV_table)))
-  ASV_table_filtered <- ASV_table[total >= vtot & occurrence >= vocc][order(total, decreasing = TRUE)]
+  ASV_table_filtered <- ASV_table[total >= vtot & occurrence >= vocc, ]
+  ASV_table_filtered <- ASV_table_filtered[order(ASV_table_filtered$total, decreasing = TRUE), ]
   return(ASV_table_filtered)
 }
 
